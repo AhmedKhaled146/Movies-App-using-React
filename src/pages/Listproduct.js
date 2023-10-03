@@ -103,7 +103,7 @@ export default function List() {
         {/* pagination */}
         <div className="text-center">
           <button
-            className="btn btn-success"
+            className="btn btn-primary"
             onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}
           >
@@ -111,7 +111,7 @@ export default function List() {
           </button>
           <span className=" page m-5">{page}</span>
           <button
-            className="btn btn-success"
+            className="btn btn-primary"
             onClick={() => handlePageChange(page + 1)}
           >
             Next Page
