@@ -6,7 +6,9 @@ import { axiosInstanceImage } from "../../apis/config.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
-
+import { LanguageContext } from "../../context/language.js";
+import { useContext } from "react";
+import { useEffect } from "react";
 import renderStars from "../stars/Star.js";
 import {
   addToWatchlist,
@@ -16,6 +18,25 @@ import {
 import "./style.css";
 
 function Showall(props) {
+  const { contextLang } = useContext(LanguageContext);
+
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    const apiKey = "f656c318dfdfc11c034aee2bda244dd4";
+    const apiUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&page=1&language=${contextLang}`;
+
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setMovies(data.results);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [contextLang]);
+
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isSolidHeart, setIsSolidHeart] = useState(false);

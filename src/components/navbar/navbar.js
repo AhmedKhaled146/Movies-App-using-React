@@ -1,10 +1,17 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { LanguageContext } from "../../context/language.js";
 import "./navbar.css";
+import { useContext } from "react";
+
 
 function MyNavbar() {
-  // const counter = useSelector((state) => state.counter.counter_val);
+  const { contextLang, setContextLang } = useContext(LanguageContext);
+
+  const changeLanguage = (newLanguage) => {
+    setContextLang(newLanguage);
+  };
   const cart = useSelector((state) => state.cart);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -47,24 +54,26 @@ function MyNavbar() {
                 Watchlist - {cart.watchlistCount}
               </NavLink>
             </li>
-            <li className="nav-item">
+            {/* <li>
               <NavLink
-                to="/about-Us"
+                to="/to-ar"
                 className="nav-link"
                 activeClassName="active-link"
+                onClick={() => changeLanguage("ar")}
               >
                 AR
               </NavLink>
             </li>
-            <li className="nav-item">
+            <li>
               <NavLink
-                to="/contact-Us"
+                to="/to-en"
                 className="nav-link"
                 activeClassName="active-link"
+                onClick={() => changeLanguage("en")}
               >
                 EN
               </NavLink>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>
