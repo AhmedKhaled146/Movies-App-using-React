@@ -2,3 +2,13 @@ a{
     text-decoration: none;
     cursor: pointer;
 }
+.icon{
+    font-size: 40px;
+    color: rgb(255, 247, 0);
+}
+.icon_button{
+    border: 0;
+}
+.test{
+    cursor: pointer;
+}

@@ -1,95 +1,57 @@
-import React, { useEffect, useState } from "react";
-import Table from "react-bootstrap/Table";
-import { Container, Button } from "react-bootstrap";
+import React from "react";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import { Container, Alert } from "react-bootstrap";
 
-import {
-  incrementQuantity,
-  decrementQuantity,
-  removeFromCart,
-  clearCart,
-} from "../store/slices/Card";
+import { removeFromWatchlist, clearWatchList } from "../store/slices/Card.js";
+import { axiosInstanceImage } from "../apis/config.js";
 
 import { useDispatch, useSelector } from "react-redux";
 
-export default function Cart() {
-  const cart = useSelector((state) => state.cart);
+export default function WatchList() {
+  const watchlist = useSelector((state) => state.cart.watchlist);
   const dispatch = useDispatch();
-  console.log("Product Details:", cart);
-  console.log("Quantity:", cart.count);
 
-  // let [totalPrice, setTotalPrice] = useState(
-  //   cart.items.reduce((sum, item) => sum + item.quantity * item.price, 0)
-  // );
-  // const updateTotal = () => {
-  //   setTotalPrice(
-  //     cart.items.reduce((sum, item) => sum + item.quantity * item.price, 0)
-  //   );
-  // };
-  const [totalPrice, setTotalPrice] = useState(
-    cart.items.reduce((sum, item) => sum + item.quantity * item.price, 0)
-  );
-
-  // Update total price when cart items change
-  useEffect(() => {
-    setTotalPrice(
-      cart.items.reduce((sum, item) => sum + item.quantity * item.price, 0)
-    );
-  }, [cart.items]);
+  const clearWatchlist = () => {
+    if (window.confirm("Are you sure you want to clear your watchlist?")) {
+      dispatch(clearWatchList());
+    }
+  };
 
   return (
     <Container className="py-5">
-      <h1 className="py-5">Cart</h1>
-      <Button variant="danger" onClick={() => dispatch(clearCart())}>
-        clear cart
-      </Button>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>title</th>
-            <th>image</th>
-            <th>Quantity</th>
-            <th>price</th>
-            <th>actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cart.items.map((product, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{product.title}</td>
-              <td>
-                <img
-                  src={product.thumbnail}
-                  className="card-img-top"
-                  alt="Product"
-                  style={{ height: "100px", width: "100px" }}
-                />
-              </td>
-              <td>
-                <button className='btn btn-info mx-3' onClick={() => dispatch(incrementQuantity(product.id))}>
-                  +
-                </button>
-                {product.quantity}
-                <button className='btn btn-danger mx-3' onClick={() => dispatch(decrementQuantity(product.id))}>
-                  -
-                </button>
-              </td>
-              <td>{product.price}</td>
-              <td>
-                <Button
-                  variant="danger"
-                  onClick={() => dispatch(removeFromCart(product))}
-                >
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <hr />
-      <h4>total Price:{totalPrice}$</h4>
+      <h1 className="py-5">My Watch List</h1>
+      {watchlist.length === 0 ? (
+        <Alert variant="info">Your watch list is empty.</Alert>
+      ) : (
+        <>
+          <Button variant="danger" onClick={clearWatchlist} className="mb-3">
+            Clear My Watch List
+          </Button>
+          <div className="row row-cols-1 row-cols-md-3 g-4">
+            {watchlist.map((movie, index) => (
+              <div className="col mb-4" key={index}>
+                <Card>
+                  <Card.Img
+                    variant="top"
+                    src={`${axiosInstanceImage.defaults.baseURL}/${movie.backdrop_path}`}
+                    alt="Movie"
+                  />
+                  <Card.Body>
+                    <Card.Title>{movie.original_title}</Card.Title>
+                    <Button
+                      variant="danger"
+                      onClick={() => dispatch(removeFromWatchlist(movie))}
+                    >
+                      Remove
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </Container>
   );
 }

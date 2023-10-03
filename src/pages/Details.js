@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import { axiosInstance } from "../apis/config.js";
 import { axiosInstanceImage } from "../apis/config.js";
 import { useNavigate } from "react-router-dom";
-
+import {
+  addToWatchlist,
+  removeFromWatchlist,
+} from "../store/slices/Card.js";
 import renderStars from "../components/stars/Star.js";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart } from "../store/slices/Card.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
@@ -29,6 +31,7 @@ export default function MovieDetails() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [movie, setMovie] = useState(null);
+  const [isSolidHeart, setIsSolidHeart] = useState(false);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
 
   useEffect(() => {
@@ -49,6 +52,21 @@ export default function MovieDetails() {
         console.log(err);
       });
   }, [id]);
+
+  // Function to check if the movie is in watchlist
+  const isInWatchlist = useSelector((state) =>
+    state.cart.watchlist.some((item) => item.id === id)
+  );
+
+  // Function to toggle watchlist for recommended movies
+  const handleRecommendedWatchlistToggle = () => {
+    if (isInWatchlist) {
+      dispatch(removeFromWatchlist(id));
+    } else {
+      dispatch(addToWatchlist(id));
+    }
+    setIsSolidHeart(!isInWatchlist);
+  };
 
   return (
     <>
@@ -77,8 +95,9 @@ export default function MovieDetails() {
 
               <p className="card-text">{movie.overview}</p>
               <p className="card-text">Brand: {movie.brand}</p>
-              <FontAwesomeIcon icon={faRegularHeart} />
-              <FontAwesomeIcon icon={faSolidHeart} />
+              <FontAwesomeIcon
+                icon={isInWatchlist ? faSolidHeart : faRegularHeart}
+              />
             </div>
           </div>
         ) : (
@@ -89,7 +108,7 @@ export default function MovieDetails() {
         <h2>Recommended Movies</h2>
         <div className="row row-cols-1 row-cols-md-4 g-4">
           {recommendedMovies.map((recommendedMovie) => (
-            <div className="">
+            <div className="" key={recommendedMovie.id}>
               <a
                 onClick={() => redirectToDetails(recommendedMovie.id)}
                 className="card container"
@@ -115,13 +134,25 @@ export default function MovieDetails() {
                   Rating: {renderStars(recommendedMovie.vote_average)}
                   <br />
                   <br />
-                  <a
-                    className=""
-
-                  >
+                  <a className="">
                     {" "}
-                    <FontAwesomeIcon icon={faRegularHeart} />
-                    <FontAwesomeIcon icon={faSolidHeart} />
+                    <button
+                      className="icon_button"
+                      onClick={() =>
+                        handleRecommendedWatchlistToggle(recommendedMovie.id)
+                      }
+                    >
+                      <FontAwesomeIcon
+                        className="icon"
+                        icon={isInWatchlist ? faSolidHeart : faRegularHeart}
+                      />
+                    </button>
+                    <button
+                      className="btn btn-primary m-3"
+                      onClick={() => redirectToDetails(recommendedMovie.id)}
+                    >
+                      Watch
+                    </button>
                   </a>
                 </div>
               </a>

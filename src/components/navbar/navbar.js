@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import "./navbar.css";
 
 function MyNavbar() {
-  const counter = useSelector((state) => state.counter.counter_val);
+  // const counter = useSelector((state) => state.counter.counter_val);
   const cart = useSelector((state) => state.cart);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -40,11 +40,11 @@ function MyNavbar() {
             {" "}
             <li className="nav-item">
               <NavLink
-                to="/add-to-card"
+                to="/add-to-watch-list"
                 className="nav-link"
                 activeClassName="active-link"
               >
-                Watch List - {cart.count}
+                Watchlist - {cart.watchlistCount}
               </NavLink>
             </li>
             <li className="nav-item">

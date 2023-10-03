@@ -3,56 +3,36 @@ import { createSlice } from "@reduxjs/toolkit";
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    items: [],
-    count: 0,
+    watchlist: [],
+    watchlistCount: 0,
   },
   reducers: {
-    addToCart: (state, action) => {
-      const existingItem = state.items.find((item) => item.id === action.payload.id);
-      if (existingItem) {
-        existingItem.quantity += 1;
-      } else {
-        state.items.push({ ...action.payload, quantity: 1 });
+    addToWatchlist: (state, action) => {
+      const existingItem = state.watchlist.find(
+        (item) => item.id === action.payload.id
+      );
+      if (!existingItem) {
+        state.watchlist.push({ ...action.payload });
+        state.watchlistCount += 1;
       }
-      state.count += 1;
     },
-    removeFromCart: (state, action) => {
-      const removedItem = state.items.find((item) => item.id === action.payload.id);
-      if (removedItem) {
-        state.count -= removedItem.quantity;
-        state.items = state.items.filter((item) => item.id !== action.payload.id);
-      }
+    removeFromWatchlist: (state, action) => {
+      state.watchlist = state.watchlist.filter(
+        (item) => item.id !== action.payload.id
+      );
+      state.watchlistCount -= 1;
     },
 
-
-    incrementQuantity: (state, action) => {
-      const item = state.items.find((item) => item.id === action.payload);
-      if (item) {
-        item.quantity += 1;
-        state.count += 1;
-      }
+    clearWatchList: (state) => {
+      state.watchlist = [];
     },
-    decrementQuantity: (state, action) => {
-      const item = state.items.find((item) => item.id === action.payload);
-      if (item && item.quantity > 1) {
-        item.quantity -= 1;
-        state.count -= 1;
-      }
-    },
-    clearCart: (state) => {
-      state.items = [];
-      state.count = 0;
-    },
-
   },
 });
 
 export const {
-  addToCart,
-  removeFromCart,
-  incrementQuantity,
-  decrementQuantity,
-  clearCart
+  addToWatchlist,
+  removeFromWatchlist,
+  clearWatchList,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
