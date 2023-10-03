@@ -5,6 +5,11 @@ import renderStars from "../stars/Star.js";
 import { addToCart } from "../../store/slices/Card.js";
 import { useDispatch } from "react-redux";
 import {axiosInstanceImage} from '../../apis/config.js'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
+
+import './style.css'
 
 
 
@@ -19,13 +24,12 @@ function Showall(props) {
 
   return (
     <div className="">
-
-      <div
+      <a
+        onClick={() => redirectToDetails(props.moviesdata.id)}
         className="card container"
         style={{
-          height: "350px",
+          height: "380px",
           maxWidth: "300px",
-          alignItems: "",
         }}
       >
         <img
@@ -37,22 +41,22 @@ function Showall(props) {
             width: "100%",
           }}
         />
-
         <div className="card-body">
           <h5 className="card-title">{props.moviesdata.original_title}</h5>
           <p className="card-text">{props.moviesdata.release_date}</p>
           Rating: {renderStars(props.moviesdata.vote_average)}
           <br />
           <br />
-          <button
-            className="btn btn-info"
+          <a
+            className=""
             onClick={() => redirectToDetails(props.moviesdata.id)}
           >
             {" "}
-            Details{" "}
-          </button>
+            <FontAwesomeIcon icon={faRegularHeart} />
+            <FontAwesomeIcon icon={faSolidHeart} />
+          </a>
         </div>
-      </div>
+      </a>
     </div>
   );
 }

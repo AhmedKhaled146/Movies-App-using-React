@@ -24,7 +24,7 @@ function App() {
               dir={lang === "ar" ? "rtl" : "ltr"}
             >
               <MyNavbar />
-              <div>
+              <div className="all p-5">
                 <Routers />
               </div>
             </div>
