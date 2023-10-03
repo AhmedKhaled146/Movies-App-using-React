@@ -46,19 +46,21 @@ export default function List() {
     <>
       <div className="container my-5">
         {/* search place */}
-        <div className="text-center">
-          <h1>Search Place</h1>
+        <div className="text-center p-3 m-5 bg-dark text-white" style={{
+          borderRadius: '10px'
+        }}>
+          <h1>Welcome To our Movies App</h1>
           <div className="input-group mb-3">
             <input
               type="text"
-              className="form-control"
+              className="form-control m-2"
               placeholder="Search for a movie..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <div className="input-group-append">
               <button
-                className="btn btn-outline-secondary"
+                className="btn btn-outline-secondary m-2"
                 type="button"
                 onClick={handleSearch}
               >
